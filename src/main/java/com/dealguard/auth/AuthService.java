@@ -5,6 +5,7 @@ import com.dealguard.auth.dto.LoginRequest;
 import com.dealguard.auth.dto.RefreshTokenRequest;
 import com.dealguard.auth.dto.SignupRequest;
 import com.dealguard.global.BadRequestException;
+import com.dealguard.global.UnauthorizedException;
 import com.dealguard.user.User;
 import com.dealguard.user.UserRepository;
 import com.dealguard.user.UserResponse;
@@ -49,9 +50,14 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public AuthResponse refresh(RefreshTokenRequest request) {
-        String email = jwtTokenProvider.getRefreshTokenSubject(request.refreshToken());
+        String email;
+        try {
+            email = jwtTokenProvider.getRefreshTokenSubject(request.refreshToken());
+        } catch (RuntimeException ex) {
+            throw new UnauthorizedException("유효하지 않거나 만료된 refresh token입니다. 다시 로그인해 주세요.");
+        }
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("refresh token user not found"));
+                .orElseThrow(() -> new UnauthorizedException("유효하지 않은 refresh token입니다. 다시 로그인해 주세요."));
         return createAuthResponse(user);
     }
 
