@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             try {
-                String email = jwtTokenProvider.getSubject(header.substring(7));
+                String email = jwtTokenProvider.getAccessTokenSubject(header.substring(7));
                 var auth = new UsernamePasswordAuthenticationToken(
                         email,
                         null,

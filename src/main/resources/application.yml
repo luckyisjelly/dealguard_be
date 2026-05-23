@@ -23,6 +23,7 @@ server:
 jwt:
   secret: ${JWT_SECRET:dealguard-local-development-secret-key-change-me}
   access-token-validity-seconds: 7200
+  refresh-token-validity-seconds: 1209600
 
 ai:
   provider: ${AI_PROVIDER:mock}

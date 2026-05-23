@@ -2,6 +2,7 @@ package com.dealguard.auth;
 
 import com.dealguard.auth.dto.AuthResponse;
 import com.dealguard.auth.dto.LoginRequest;
+import com.dealguard.auth.dto.RefreshTokenRequest;
 import com.dealguard.auth.dto.SignupRequest;
 import com.dealguard.global.BadRequestException;
 import com.dealguard.user.User;
@@ -33,7 +34,7 @@ public class AuthService {
                 request.email(),
                 passwordEncoder.encode(request.password()),
                 request.nickname()));
-        return new AuthResponse(jwtTokenProvider.createToken(user.getEmail()), UserResponse.from(user));
+        return createAuthResponse(user);
     }
 
     @Transactional(readOnly = true)
@@ -43,6 +44,21 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             throw new BadRequestException("invalid email or password");
         }
-        return new AuthResponse(jwtTokenProvider.createToken(user.getEmail()), UserResponse.from(user));
+        return createAuthResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public AuthResponse refresh(RefreshTokenRequest request) {
+        String email = jwtTokenProvider.getRefreshTokenSubject(request.refreshToken());
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadRequestException("refresh token user not found"));
+        return createAuthResponse(user);
+    }
+
+    private AuthResponse createAuthResponse(User user) {
+        return new AuthResponse(
+                jwtTokenProvider.createAccessToken(user.getEmail()),
+                jwtTokenProvider.createRefreshToken(user.getEmail()),
+                UserResponse.from(user));
     }
 }

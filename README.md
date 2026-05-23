@@ -129,7 +129,7 @@ http://localhost:8080/actuator/health
 
 1. `POST /api/auth/signup`으로 회원가입
 2. `POST /api/auth/login`으로 로그인
-3. 응답으로 받은 `accessToken`을 Authorization 헤더에 설정
+3. 응답으로 받은 `accessToken`을 Swagger 우측 상단 `Authorize` 버튼에 입력
 4. `POST /api/product-posts`로 상품 게시글 생성
 5. `POST /api/conversations`로 거래 대화방 생성
 6. `POST /api/conversations/{conversationId}/messages/bulk`로 채팅 메시지 등록
@@ -143,6 +143,22 @@ http://localhost:8080/actuator/health
 
 ```http
 Authorization: Bearer <accessToken>
+```
+
+Swagger UI에서는 우측 상단 `Authorize` 버튼을 누른 뒤 `accessToken` 값만 붙여 넣으면 됩니다.
+`Bearer` 문구는 Swagger가 자동으로 붙입니다.
+
+로그인과 회원가입 응답에는 `accessToken`과 `refreshToken`이 함께 내려옵니다.
+access token을 새로 발급받고 싶을 때는 아래 API를 사용합니다.
+
+```http
+POST /api/auth/refresh
+```
+
+```json
+{
+  "refreshToken": "<refreshToken>"
+}
 ```
 
 ## 공통 응답 형식
