@@ -1,0 +1,10 @@
+package com.dealguard.analysis;
+
+public enum AlertType {
+    MISSING_CONDITION,
+    AMBIGUOUS_EXPRESSION,
+    CONDITION_CHANGED,
+    LISTING_CHAT_MISMATCH,
+    RISKY_PAYMENT,
+    DEFECT_DISCLOSURE_RISK
+}
