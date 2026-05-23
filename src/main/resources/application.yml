@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: dealguard
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/dealguard}
+    username: ${DB_USERNAME:dealguard}
+    password: ${DB_PASSWORD:dealguard}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:dealguard-local-development-secret-key-change-me}
+  access-token-validity-seconds: 7200
+  refresh-token-validity-seconds: 1209600
+
+ai:
+  provider: ${AI_PROVIDER:mock}
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    model: ${GEMINI_MODEL:gemini-2.5-flash-lite}
+
+storage:
+  evidence-dir: ${EVIDENCE_STORAGE_DIR:storage/evidence}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
