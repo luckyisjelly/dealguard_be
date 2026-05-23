@@ -183,6 +183,16 @@ POST /api/auth/refresh
 }
 ```
 
+주요 에러 상태:
+
+- `400 Bad Request`: 요청 값 검증 실패, JSON 형식 오류, 타입 오류
+- `401 Unauthorized`: access token 누락, 만료, 유효하지 않은 토큰
+- `403 Forbidden`: 인증은 되었지만 접근 권한이 없는 요청
+- `404 Not Found`: 요청한 리소스를 찾을 수 없음
+- `409 Conflict`: 중복 데이터 또는 DB 제약 조건 위반
+- `415 Unsupported Media Type`: 지원하지 않는 Content-Type
+- `500 Internal Server Error`: 서버 내부 오류
+
 ## 폴더 구조
 
 ```text
